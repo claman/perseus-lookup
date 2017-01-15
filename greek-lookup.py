@@ -39,7 +39,6 @@ def lookup_word(word):
     # Returns a BeautifulSoup object containing the html of the 
     # Perseus Word Study Tool entry for that word; or
     # if the word is not found, returns -1
-
     # Get html using Requests and Beautiful Soup
     parameters = {'la': 'gr','l':word}
     response = requests.get(URL_BASE,params=parameters)
@@ -57,6 +56,10 @@ def get_definitions(soup):
     
     lemmas = soup.find_all('h4',class_='greek')
     lemma_definitions = soup.find_all('span',class_='lemma_definition')
+    syntax = soup.find_all('td', class_='greek')
+
+    for item in syntax:
+        print(item.text.strip() + ' - ' + item.next_sibling.next_sibling.text.strip())
 
     lemma_list, lemma_definition_list = [], []
     
@@ -67,7 +70,7 @@ def get_definitions(soup):
         lemma_definition_list.append(lemma_definition.text.strip())
     
     definitions = zip(lemma_list,lemma_definition_list)
-    
+ 
     return definitions
     
 def main(query):

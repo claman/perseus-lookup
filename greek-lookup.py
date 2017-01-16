@@ -60,7 +60,7 @@ def get_definitions(soup):
 
     syntax = syntax[1:]
 
-    lemma_list, lemma_definition_list = [], []
+    lemma_list, lemma_definition_list, syntax_list = [], [], []
 
     for lemma in lemmas:
         lemma_list.append(lemma.text.strip())
@@ -68,7 +68,12 @@ def get_definitions(soup):
     for lemma_definition in lemma_definitions:
         lemma_definition_list.append(lemma_definition.text.strip())
 
-    definitions = zip(lemma_list,lemma_definition_list)
+    for part in syntax:
+        if part.text.strip() is not "\n":
+            print("y")
+        syntax_list.append(part.text.strip())
+
+    definitions = zip(lemma_list,lemma_definition_list,syntax_list)
 
     return definitions
 
@@ -80,7 +85,7 @@ def main(query):
     else:
         definitions = get_definitions(soup)
         for definition in definitions:
-            print(query + " > "+definition[0]+": "+definition[1])
+            print(query + " > "+definition[0]+": "+definition[1]+"\n"+definition[2])
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
